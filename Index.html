@@ -1,0 +1,54 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+const games = [
+  { title: "The Witcher 3", image: "/games/witcher3.jpg" },
+  { title: "God of War", image: "/games/godofwar.jpg" },
+  { title: "Cyberpunk 2077", image: "/games/cyberpunk.jpg" },
+  { title: "Elden Ring", image: "/games/eldenring.jpg" },
+  { title: "Red Dead Redemption 2", image: "/games/rdr2.jpg" },
+];
+
+export default function GameStore() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextGame = () => {
+    setCurrentIndex((prev) => (prev + 1) % games.length);
+  };
+
+  const prevGame = () => {
+    setCurrentIndex((prev) => (prev - 1 + games.length) % games.length);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white flex flex-col items-center justify-center p-4">
+      <h1 className="text-4xl font-bold mb-8">Loja de Jogos</h1>
+
+      <div className="relative w-full max-w-md overflow-hidden">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="rounded-2xl overflow-hidden shadow-lg">
+            <img src={games[currentIndex].image} alt={games[currentIndex].title} className="w-full h-64 object-cover" />
+            <CardContent className="text-center text-xl font-semibold mt-4">
+              {games[currentIndex].title}
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      <div className="flex gap-4 mt-6">
+        <Button onClick={prevGame} variant="outline">Anterior</Button>
+        <Button onClick={nextGame} variant="outline">Próximo</Button>
+      </div>
+
+      <footer className="mt-12 text-gray-400 text-sm">© 2025 GameStore. Todos os direitos reservados.</footer>
+    </div>
+  );
+}
